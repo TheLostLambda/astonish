@@ -28,7 +28,7 @@
 
 (defun filter-conses-by-car (car forms)
   "Filter forms so that only ones with the specified car remain"
-  (remove-if-not (lambda (x) (and (listp x) (eq car (car x)))) forms))
+  (remove-if-not (lambda (x) (and (listp x) (string= car (car x)))) forms))
 
 (defun map-inodes (function form)
   "Maps the given function over all the inner nodes of a tree"
