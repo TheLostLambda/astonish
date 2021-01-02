@@ -11,30 +11,13 @@
     (uiop:with-safe-io-syntax (:package current-package)
       (uiop:read-file-forms file))))
 
-;; FIXME: This should take a fancy query string that supports OR operations,
-;; filtering on cadr, caddr, etc, and should also work on atoms. Maybe something
-;; like this: "test . code-of-conduct > is-true, is-false", run on this:
-;;
-;; (TEST CODE-OF-CONDUCT "Is the given action unsuitable for the given pet?"
-;;   (IS-FALSE (PET "Cat")) (IS-FALSE (PET "Dog")) (IS-TRUE (PET "Fish"))
-;;   (IS-FALSE (PET "Rabbit")) (IS-FALSE (PET "Bird"))
-;;   (IS-TRUE (PLAY-FETCH "Cat")) (IS-FALSE (PLAY-FETCH "Dog"))
-;;   (IS-TRUE (PLAY-FETCH "Fish")) (IS-TRUE (PLAY-FETCH "Rabbit"))
-;;   (IS-TRUE (PLAY-FETCH "Bird"))))
-;;
-;; Should give:
-;;
-;; (IS-FALSE (PET "Cat")) (IS-FALSE (PET "Dog")) (IS-TRUE (PET "Fish"))
-;; (IS-FALSE (PET "Rabbit")) (IS-FALSE (PET "Bird"))
-;; (IS-TRUE (PLAY-FETCH "Cat")) (IS-FALSE (PLAY-FETCH "Dog"))
-;; (IS-TRUE (PLAY-FETCH "Fish")) (IS-TRUE (PLAY-FETCH "Rabbit"))
-;; (IS-TRUE (PLAY-FETCH "Bird"))))
 (defun select-conses (path forms)
-  "Given a path (a list of car's) and list of forms, return all matching conses"
+  "Given a path (a list of car's) and list of forms, return all matching conses.
+   The second return value is the same selection, but inverted"
   (destructuring-bind (x &rest xs) path
     (let ((selected (filter-conses-by-car x forms)))
       (if (null xs)
-          selected
+          (values selected (cons-difference forms selected))
           (select-conses xs (apply #'append selected))))))
 
 (defun macroexpand-select (macros form)
@@ -52,3 +35,7 @@
   (if (listp form)
       (funcall function (mapcar (lambda (n) (map-inodes function n)) form))
       form))
+
+(defun cons-difference (a b)
+  "Like set-difference, but filters for conses and preserves order"
+  (remove-if (lambda (x) (or (find x b) (atom x))) a))

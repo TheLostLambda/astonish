@@ -15,16 +15,18 @@
     (testing "should work for nested forms"
       (ok (equal '((PLAY-FETCH "Cat") (PLAY-FETCH "Fish")
                    (PLAY-FETCH "Rabbit")(PLAY-FETCH "Bird"))
-                 (select-conses '(test is-true play-fetch) all-forms))))))
+                 (select-conses '(test is-true play-fetch) all-forms)))
+      (ok (equal '((PET "Fish"))
+                 (nth-value 1 (select-conses '(test is-true play-fetch) all-forms)))))))
 
 (deftest macroexpand-select-test
   (defmacro three (x) `(,x ,x ,x))
   (defmacro rev (&body body) (reverse body))
   (let ((test-form     '(defun wacky-stuff (maybe?)
                           (if maybe? (loop :repeat 10 :collect '(three "cats"))
-                              (rev '(1 2 3) cadr))))
+                                     (rev '(1 2 3) cadr))))
         (expected-form '(defun wacky-stuff (maybe?)
                           (if maybe? (loop :repeat 10 :collect '("cats" "cats" "cats"))
-                              (cadr '(1 2 3))))))
+                                     (cadr '(1 2 3))))))
     (testing "expands some, not all, macros"
       (ok (equal expected-form (macroexpand-select '(three rev) test-form))))))
