@@ -2,7 +2,15 @@
 
 A Common Lisp library for querying and manipulating Lisp ASTs
 
-## Tasks
+## Usage
+
+TODO
+
+## Installation
+
+Will hopefully be in Quicklisp soon?
+
+## Proposed Features
 
 select-conses should take a fancy query string that supports OR operations,
 filtering on cadr, caddr, etc, and should also work on atoms. Maybe something
@@ -22,11 +30,3 @@ Should give:
 (IS-TRUE (PLAY-FETCH "Cat")) (IS-FALSE (PLAY-FETCH "Dog"))
 (IS-TRUE (PLAY-FETCH "Fish")) (IS-TRUE (PLAY-FETCH "Rabbit"))
 (IS-TRUE (PLAY-FETCH "Bird"))))
-
-## Usage
-
-TODO
-
-## Installation
-
-TODO
