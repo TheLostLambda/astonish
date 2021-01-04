@@ -8,10 +8,10 @@
 
 (deftest load-forms-from-file-test
   (testing "should be 10 top-level forms"
-    (ok (= 10 (length (load-forms-from-file #P"tests/data/pal-picker-test.lisp"))))))
+    (ok (= 10 (length (load-forms-from-file #P"tests/data/pal-picker-test"))))))
 
 (deftest select-conses-test
-  (let ((all-forms (load-forms-from-file #P"tests/data/pal-picker-test.lisp" #.*package*)))
+  (let ((all-forms (load-forms-from-file #P"tests/data/pal-picker-test" #.*package*)))
     (testing "should work for nested forms"
       (ok (equal '((PLAY-FETCH "Cat") (PLAY-FETCH "Fish")
                    (PLAY-FETCH "Rabbit")(PLAY-FETCH "Bird"))
